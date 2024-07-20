@@ -12,6 +12,20 @@ export SAVEHIST=100000
 ## ヒストリを共有
 setopt share_history
 # ghq
+setopt hist_ignore_all_dups   # 履歴が重複した場合に古い履歴を削除する
+
+# histry search
+# fzf history
+function fzf-select-history() {
+    BUFFER=$(history -n -r 1 | fzf --query "$LBUFFER" --reverse)
+    CURSOR=$#BUFFER
+    zle reset-prompt
+    zle accept-line
+}
+zle -N fzf-select-history
+bindkey '^r' fzf-select-history
+
+# ghq search
 function ghq-fzf() {
   local target_dir=$(ghq list -p | fzf --query="$LBUFFER")
 
