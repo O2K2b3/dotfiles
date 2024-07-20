@@ -10,7 +10,7 @@ export HISTSIZE=1000
 export SAVEHIST=100000
 ## ヒストリを共有
 setopt share_history
-# ghq
+setopt hist_expire_dups_first # 履歴を切り詰める際に、重複する最も古いイベントから消す
 setopt hist_ignore_all_dups   # 履歴が重複した場合に古い履歴を削除する
 
 # histry search
@@ -41,11 +41,20 @@ bindkey "^]" ghq-fzf
 
 # starship config
 eval "$(starship init zsh)"
-
+# sheldon (plugin manager)
 eval "$(sheldon source)"
-
+# mise
+eval "$(mise activate zsh)"
 # fizzy finder
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+eval "$(fzf --zsh)"
+
+# pnpm
+export PNPM_HOME="/Users/tsubasa/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
 
 ### エイリアス
 alias ls='eza -l --icons' la='eza -la' lsl='eza --icons -a -RT --level 2'
