@@ -2,7 +2,7 @@ import = ["~/.config/alacritty/themes/carbon-dark.toml"]
 
 [shell]
 program = "/bin/zsh"
-args = ["-l", "-c", "tmux a -t default || tmux"]
+args = ["-l", "-c", "tmux a -t default || tmux new -s default"]
 
 [window]
 dimensions = { columns = 184, lines = 60 }
@@ -15,3 +15,6 @@ italic = { family = "Hack Nerd Font", style = "Italic" }
 size = 14
 
 offset = { x = 1, y = 0 }
+
+[env]
+TERM = "alacritty"

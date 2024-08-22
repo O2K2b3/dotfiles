@@ -21,9 +21,9 @@ github = "romkatv/zsh-defer"
 defer = "{{ hooks?.pre | nl }}{% for file in files %}zsh-defer source \"{{ file }}\"\n{% endfor %}{{ hooks?.post | nl }}"
 
 
-[plugins.zsh-autosuggestions]
-github = "zsh-users/zsh-autosuggestions"
-apply = ["defer"]
+# [plugins.zsh-autosuggestions]
+# github = "zsh-users/zsh-autosuggestions"
+# apply = ["defer"]
 
 [plugins.fast-syntax-highlighting]
 github = 'zdharma-continuum/fast-syntax-highlighting'
