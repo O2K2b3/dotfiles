@@ -63,6 +63,7 @@ source $HOME/.cargo/env
 alias ls='eza -l --icons' la='eza -la' lsl='eza --icons -a -RT --level 2'
 alias tailscale="/Applications/Tailscale.app/Contents/MacOS/Tailscale"
 alias v="nvim"
+alias gkg="gk graph -k"
 
 # Amazon Q post block. Keep at the bottom of this file.
 [[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh"
