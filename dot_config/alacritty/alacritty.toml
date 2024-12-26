@@ -1,6 +1,7 @@
+[general]
 import = ["~/.config/alacritty/themes/carbon-dark.toml"]
 
-[shell]
+[terminal.shell]
 program = "/bin/zsh"
 args = ["-l", "-c", "tmux a -t default || tmux new -s default"]
 
