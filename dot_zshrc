@@ -67,5 +67,6 @@ alias gkg="gk graph -k"
 # keka cli
 alias keka="/Applications/Keka.app/Contents/MacOS/Keka --cli"
 
+
 # Amazon Q post block. Keep at the bottom of this file.
 [[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.post.zsh"
