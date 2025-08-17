@@ -1,0 +1,22 @@
+# Theme 
+theme = "GitHub-Dark-High-Contrast"
+
+# Fontsettings
+font-family = "PlemolJP35 Console"
+font-feature = "-calt"
+font-feature = "-dlig"
+font-feature = "-liga"
+font-size = 18
+
+# window settings 
+window-decoration="auto"
+macos-titlebar-style = "transparent"
+window-padding-balance = true
+window-padding-x = 0
+window-padding-y = 0
+window-theme = "ghostty"
+background-blur-radius = 20
+background-opacity = 0.7
+window-save-state="always"
+
+term = "xterm-256color"
