@@ -1,0 +1,68 @@
+{ pkgs, ... }:
+{
+  home.username = "{{ .chezmoi.username }}";
+  home.homeDirectory = "{{ .chezmoi.homeDir }}";
+  home.stateVersion = "24.11";
+
+  home.packages = with pkgs; [
+    # custom overlays (k1LoW)
+    git-wt
+    roots
+
+    # navigation / search
+    ghq
+    fzf
+    zoxide
+    peco
+
+    # editors
+    vim
+    neovim
+
+    # dev environments / build
+    devenv
+    chezmoi
+    mise
+    uv
+    pnpm
+    gradle
+    luarocks
+    go-task
+
+    # CI / automation
+    act
+    wrkflw
+
+    # network tools
+    arp-scan
+    httpie
+    wget
+    rsync
+
+    # data
+    duckdb
+    jq
+
+    # file/dir/utility
+    bat
+    eza
+    fd
+    dust
+    gibo
+
+    # git
+    git
+    git-lfs
+    gh
+    lazygit
+
+    # container
+    podman
+
+    # shell / prompt
+    sheldon
+    starship
+  ];
+
+  programs.home-manager.enable = true;
+}
