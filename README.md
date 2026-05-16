@@ -22,6 +22,8 @@ Mac (aarch64-darwin) 環境を再現するための dotfiles リポジトリ。
 │    dot_zshrc, dot_tmux.conf                             │
 │    dot_config/{nvim,alacritty,ghostty,                  │
 │                aerospace,sketchybar,...}                │
+│    dot_agents/.skill-lock.json  ← skill lock のみ管理  │
+│    run_onchange_install-skills.sh.tmpl ← 自動復元       │
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -60,6 +62,9 @@ nix run home-manager/master -- switch --flake ~/.config/home-manager#<your-usern
 ```
 
 以降は `~/.nix-profile/bin/home-manager` が利用可能。
+
+### 5. agent skills 復元
+`chezmoi apply` 時に `run_onchange_install-skills.sh.tmpl` が走り、`~/.agents/.skill-lock.json` から `npx skills add` で skill を復元する。初回は `node` (npx) が PATH にある状態で `chezmoi apply` を再実行すると確実。
 
 ## 日常コマンド
 
@@ -111,6 +116,32 @@ git log --oneline
 git revert <commit>     # または git reset --hard <commit>
 chezmoi apply           # target に反映
 ```
+
+## agent skills (`~/.agents/`)
+
+Claude Code 等の agent skill は `npx skills` で管理。将来 `gh skill install` 系の経路が追加された場合も同じ仕組みで吸収できる構造にしてある。
+
+### 管理範囲
+| 対象 | chezmoi 管理 |
+|---|---|
+| `~/.agents/.skill-lock.json` | ✅ (`dot_agents/dot_skill-lock.json`) |
+| `~/.agents/skills/<name>/` (skill 本体) | ❌ (`.chezmoiignore` で除外、lock から復元) |
+| `~/.claude/commands -> ~/.agents/skills` symlink | ❌ (Claude Code 側で自動生成想定) |
+
+### 自動復元
+`chezmoi apply` 時に `run_onchange_install-skills.sh.tmpl` が以下を行う：
+1. lock の中身がテンプレート内に埋め込まれており、変化を chezmoi が検知すると再実行
+2. `jq` で lock を読み、各 skill を `npx skills add <sourceUrl> -g -y -s <name>` で install
+3. 将来 `gh skill install` 等が必要になったらスクリプト内のコメントアウト分岐を有効化
+
+### skill 追加
+```sh
+npx skills add <github-user>/<repo> -g                 # repo 内の全 skill
+npx skills add <github-user>/<repo> -g -s <name>       # 個別 skill のみ
+chezmoi re-add ~/.agents/.skill-lock.json              # lock を chezmoi に取り込み
+```
+
+`chezmoi re-add` 後は `~/.local/share/chezmoi/dot_agents/dot_skill-lock.json` が更新され、commit すれば他環境にも反映される。
 
 ## ホスト
 
