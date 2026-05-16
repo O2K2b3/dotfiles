@@ -5,10 +5,8 @@
 # chezmoi hashes the rendered output of this template and re-runs the script
 # whenever that hash changes (i.e., when any embedded lock file content changes).
 #
-# Lock content embedded for change-detection (do not delete):
-# --- BEGIN .skill-lock.json ---
-# {{ include "dot_agents/dot_skill-lock.json" }}
-# --- END .skill-lock.json ---
+# Lock content hash (do not delete; chezmoi re-runs this script when this changes):
+# {{ include "dot_agents/dot_skill-lock.json" | sha256sum }}
 
 set -euo pipefail
 
