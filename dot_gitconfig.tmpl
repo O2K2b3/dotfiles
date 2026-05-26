@@ -1,0 +1,6 @@
+[core]
+{{- if contains "WSL" .chezmoi.kernel.osrelease }}
+	sshCommand = /mnt/c/Windows/System32/OpenSSH/ssh.exe
+{{- else }}
+	sshCommand = ssh
+{{- end }}
