@@ -1,7 +1,8 @@
 # Amazon Q pre block. Keep at the top of this file.
 [[ -f "${HOME}/Library/Application Support/amazon-q/shell/zshrc.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/amazon-q/shell/zshrc.pre.zsh"
 # lang settings for hyper
-export LANG=ja_JP.UTF-8
+export LANG=en_US.UTF-8
+export LC_ALL=C.UTF-8
 
 # 履歴
 # メモリに保存される履歴の件数
@@ -43,21 +44,29 @@ bindkey "^]" ghq-fzf
 eval "$(starship init zsh)"
 # sheldon (plugin manager)
 eval "$(sheldon source)"
-# mise
+{{ if not (contains "microsoft" .chezmoi.kernel.osrelease) -}}
+# mise (skip on WSL)
 eval "$(mise activate zsh)"
+{{- end }}
 # fizzy finder
 eval "$(fzf --zsh)"
 
 # pnpm
+{{ if eq .chezmoi.os "darwin" -}}
 export PNPM_HOME="$HOME/Library/pnpm"
+{{- else -}}
+export PNPM_HOME="$HOME/.local/share/pnpm"
+{{- end }}
 case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
+  *":$PNPM_HOME/bin:"*) ;;
+  *) export PATH="$PNPM_HOME/bin:$PATH" ;;
 esac
 # pnpm end
 
-# use podman insted of docker
-export DOCKER_HOST="unix:///$(podman machine inspect --format '{{.ConnectionInfo.PodmanSocket.Path}}')"
+{{ if not (contains "microsoft" .chezmoi.kernel.osrelease) -}}
+# use podman instead of docker (skip on WSL)
+export DOCKER_HOST="unix:///$(podman machine inspect --format '{{ `{{.ConnectionInfo.PodmanSocket.Path}}` }}')"
+{{- end }}
 
 # rustup
 # source $HOME/.cargo/env
