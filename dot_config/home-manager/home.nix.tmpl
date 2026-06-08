@@ -1,14 +1,22 @@
-{ pkgs, ... }:
+{ pkgs, lib, config,... }:
 {
+  imports = [
+    ./op.nix
+    ./overlays/nvim.nix
+  ];
+
+  nixpkgs.config.allowUnfree = true;
+
   home.username = "{{ .chezmoi.username }}";
   home.homeDirectory = "{{ .chezmoi.homeDir }}";
   home.stateVersion = "24.11";
 
   home.packages = with pkgs; [
-    # custom overlays (k1LoW)
-    git-wt
-    roots
+    # 1Password CLI
+    _1password-cli
 
+    # custom packages
+    (callPackage ./gwq.nix { })
     # navigation / search
     ghq
     fzf
@@ -17,7 +25,6 @@
 
     # editors
     vim
-    neovim
 
     # dev environments / build
     devenv
@@ -56,13 +63,103 @@
     gh
     lazygit
 
-    # container
-    podman
-
     # shell / prompt
     sheldon
     starship
+    zsh-completions
+    zsh-syntax-highlighting
+
+    # terminal multiplexer
+    tmux
+    
+    # shell
+    zsh
   ];
+
+  home.sessionVariables = {
+      PNPM_HOME = "${config.home.homeDirectory}/.local/share/pnpm";
+  };
+
+  home.sessionPath = [
+    "${config.home.homeDirectory}/.local/share/pnpm/bin"
+  ];
+
+  programs.zsh = {
+    enable = true;
+    enableCompletion = true;
+    shellAliases = {
+      ls="eza -l --icons";
+      la="eza -la";
+      lsl="eza --icons -a -RT --level 2";
+      v = "nvim";
+    };
+    initContent = ''
+      # lang settings for hyper
+      export LANG=en_US.UTF-8
+      export LC_ALL=C.UTF-8
+
+      # 履歴
+      # メモリに保存される履歴の件数
+      export HISTSIZE=1000
+      # 履歴ファイルに保存される履歴の件数
+      export SAVEHIST=100000
+      ## ヒストリを共有
+      setopt share_history
+      setopt hist_expire_dups_first # 履歴を切り詰める際に、重複する最も古いイベントから消す
+      setopt hist_ignore_all_dups   # 履歴が重複した場合に古い履歴を削除する
+    
+      # histry search
+      # fzf history
+      function fzf-select-history() {
+        BUFFER=$(history -n -r 1 | fzf --query "$LBUFFER" --reverse)
+        CURSOR=$#BUFFER
+        zle reset-prompt
+        zle accept-line
+      }
+      zle -N fzf-select-history
+      bindkey '^r' fzf-select-history
+
+      # ghq and gwq worktree search
+      function ghq-fzf() {
+        local ghq_repos=$(ghq list -p)
+        local worktree_repos=$(find ~/ghq -mindepth 3 -maxdepth 3 -type d -name '*=*' 2>/dev/null)
+        local target_dir=$(echo "$ghq_repos\n$worktree_repos" | fzf --query="$LBUFFER")
+
+        if [ -n "$(target_dir)" ]; then
+          BUFFER="cd $(target_dir)"
+          zle accept-line
+        fi
+
+        zle reset-prompt
+      }
+      zle -N ghq-fzf
+      bindkey "^]" ghq-fzf
+    '';
+
+    syntaxHighlighting.enable = true;
+  };
+
+  programs.starship = {
+    enable = true;
+    settings = {
+    # Inserts a blank line between shell prompts
+    add_newline = true;
+
+    # Wait 100 milliseconds for starship to check files under the current directory.
+    scan_timeout = 1000;
+
+    # Replace the '❯' symbol in the prompt with '➜'
+    # changed >>
+    character = { 
+    success_symbol = "[>>](bold green)"; # The 'success_symbol' segment is being set to '>>' with the color 'bold green'
+    error_symbol = "[>>](bold red)";     # The 'error_symbol' segment is being set to '>>' with the color 'bold red'
+    };
+    # Disable the package module, hiding it from the prompt completely
+    package.disabled = true;
+    };
+  };
+
+  programs.fzf.enable = true;
 
   programs.home-manager.enable = true;
 }
