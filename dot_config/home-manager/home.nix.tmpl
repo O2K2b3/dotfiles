@@ -5,7 +5,10 @@
     ./overlays/nvim.nix
   ];
 
-  nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg)[
+    "claude"
+    "1password-cli"
+  ];
 
   home.username = "{{ .chezmoi.username }}";
   home.homeDirectory = "{{ .chezmoi.homeDir }}";
@@ -92,6 +95,7 @@
       la="eza -la";
       lsl="eza --icons -a -RT --level 2";
       v = "nvim";
+      claude-personal = "CLAUDE_CONFIG_DIR=~/.claude-personal claude";
     };
     initContent = ''
       # lang settings for hyper
@@ -125,8 +129,8 @@
         local worktree_repos=$(find ~/ghq -mindepth 3 -maxdepth 3 -type d -name '*=*' 2>/dev/null)
         local target_dir=$(echo "$ghq_repos\n$worktree_repos" | fzf --query="$LBUFFER")
 
-        if [ -n "$(target_dir)" ]; then
-          BUFFER="cd $(target_dir)"
+        if [ -n "$target_dir" ]; then
+          BUFFER="cd $target_dir"
           zle accept-line
         fi
 
@@ -160,6 +164,11 @@
   };
 
   programs.fzf.enable = true;
+
+  programs.claude-code = {
+    enable = true;
+    package = pkgs.claude-code;
+  };
 
   programs.home-manager.enable = true;
 }
