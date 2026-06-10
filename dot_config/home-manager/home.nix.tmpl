@@ -2,8 +2,9 @@
 {
   imports = [
     ./op.nix
-    ./overlays/nvim.nix
+    ./packages/nvim.nix
   ];
+
 
   nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg)[
     "claude"
@@ -19,7 +20,7 @@
     _1password-cli
 
     # custom packages
-    (callPackage ./gwq.nix { })
+    (callPackage ./packages/gwq.nix { })
     # navigation / search
     ghq
     fzf
@@ -65,6 +66,7 @@
     git-lfs
     gh
     lazygit
+    (callPackage ./packages/keifu.nix { })
 
     # shell / prompt
     sheldon
