@@ -126,7 +126,6 @@
       # ghq and gwq worktree search
       function ghq-fzf() {
         local ghq_repos=$(ghq list -p)
-        local worktree_repos=$(find ~/ghq -mindepth 3 -maxdepth 3 -type d -name '*=*' 2>/dev/null)
         local target_dir=$(echo "$ghq_repos\n$worktree_repos" | fzf --query="$LBUFFER")
 
         if [ -n "$target_dir" ]; then
