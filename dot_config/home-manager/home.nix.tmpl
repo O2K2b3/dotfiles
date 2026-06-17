@@ -27,9 +27,6 @@
     zoxide
     peco
 
-    # editors
-    vim
-
     # dev environments / build
     devenv
     chezmoi
@@ -79,10 +76,14 @@
     
     # shell
     zsh
+
+    # ai
+    opencode
   ];
 
   home.sessionVariables = {
       PNPM_HOME = "${config.home.homeDirectory}/.local/share/pnpm";
+      EDITOR = "nvim";
   };
 
   home.sessionPath = [
@@ -97,6 +98,10 @@
       la="eza -la";
       lsl="eza --icons -a -RT --level 2";
       v = "nvim";
+      vi = "nvim";
+      vim = "nvim";
+      lg = "lazygit";
+      gg = "keifu";
       claude-personal = "CLAUDE_CONFIG_DIR=~/.claude-personal claude";
     };
     initContent = ''
@@ -113,17 +118,6 @@
       setopt share_history
       setopt hist_expire_dups_first # 履歴を切り詰める際に、重複する最も古いイベントから消す
       setopt hist_ignore_all_dups   # 履歴が重複した場合に古い履歴を削除する
-    
-      # histry search
-      # fzf history
-      function fzf-select-history() {
-        BUFFER=$(history -n -r 1 | fzf --query "$LBUFFER" --reverse)
-        CURSOR=$#BUFFER
-        zle reset-prompt
-        zle accept-line
-      }
-      zle -N fzf-select-history
-      bindkey '^r' fzf-select-history
 
       # ghq and gwq worktree search
       function ghq-fzf() {
@@ -139,6 +133,10 @@
       }
       zle -N ghq-fzf
       bindkey "^]" ghq-fzf
+
+      # mise
+      eval "$(mise activate zsh)"
+      export PATH="$HOME/.local/share/mise/shims:$PATH"
     '';
 
     syntaxHighlighting.enable = true;
@@ -165,6 +163,10 @@
   };
 
   programs.fzf.enable = true;
+
+  # Neovim is installed via packages/nvim.nix; its config is managed by
+  # chezmoi under ~/.config/nvim (LazyVim). We intentionally do NOT use
+  # programs.neovim here to avoid home-manager generating its own init.lua.
 
   programs.claude-code = {
     enable = true;

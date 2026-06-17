@@ -1,7 +1,7 @@
 { pkgs, ... }:
 {
   home.packages = with pkgs; [
-    # Neovim editor
+    # Neovim editor (config is managed by chezmoi under ~/.config/nvim)
     neovim
 
     # Neovim dependencies
