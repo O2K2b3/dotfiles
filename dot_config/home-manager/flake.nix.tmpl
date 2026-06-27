@@ -8,9 +8,14 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-claude-code.url = "github:ryoppippi/nix-claude-code";
+    llm-agents.url = "github:numtide/llm-agents.nix";
+    mise-flake = {
+      url = "github:jdx/mise";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = inputs@{ self, nixpkgs, home-manager, nix-claude-code, ... }:
+  outputs = inputs@{ self, nixpkgs, home-manager, nix-claude-code, llm-agents, mise-flake, ... }:
     let
       system = "{{ if eq .chezmoi.arch "arm64" }}aarch64{{ else if eq .chezmoi.arch "amd64" }}x86_64{{ end }}-{{ .chezmoi.os }}";
       pkgs = import nixpkgs {

@@ -1,9 +1,9 @@
-{ pkgs, lib, config,... }:
+{ pkgs, lib, config, inputs, ... }:
 {
   imports = [
     ./op.nix
     ./packages/nvim.nix
-  ];
+];
 
 
   nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg)[
@@ -30,7 +30,7 @@
     # dev environments / build
     devenv
     chezmoi
-    mise
+    devbox
     uv
     pnpm
     gradle
@@ -77,8 +77,9 @@
     # shell
     zsh
 
-    # ai
-    opencode
+    # llm-agents
+    inputs.llm-agents.packages.${pkgs.system}.opencode
+    inputs.llm-agents.packages.${pkgs.system}.herdr
   ];
 
   home.sessionVariables = {
@@ -134,9 +135,6 @@
       zle -N ghq-fzf
       bindkey "^]" ghq-fzf
 
-      # mise
-      eval "$(mise activate zsh)"
-      export PATH="$HOME/.local/share/mise/shims:$PATH"
     '';
 
     syntaxHighlighting.enable = true;
