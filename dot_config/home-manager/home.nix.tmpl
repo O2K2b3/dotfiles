@@ -163,6 +163,12 @@
 
   programs.fzf.enable = true;
 
+  programs.direnv = {
+      enable = true;
+      enableZshIntegration = true;
+      nix-direnv.enable = true;
+    };
+
   # Neovim is installed via packages/nvim.nix; its config is managed by
   # chezmoi under ~/.config/nvim (LazyVim). We intentionally do NOT use
   # programs.neovim here to avoid home-manager generating its own init.lua.
