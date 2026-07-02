@@ -4,39 +4,6 @@ Mac (aarch64-darwin) 環境を再現するための dotfiles リポジトリ。
 
 `nix-darwin` + `home-manager (standalone)` + `chezmoi` の三層構成。境界を明確に分け、二重管理を避けている。
 
-## 構成
-
-```
-┌─────────────────────────────────────────────────────────┐
-│  /etc/nix-darwin/         ← system + Homebrew (sudo)    │
-│    flake.nix              ← homebrew.casks (GUI アプリ) │
-│                              + フォント + GPG/openssl   │
-├─────────────────────────────────────────────────────────┤
-│  ~/.config/home-manager/  ← user CLI tools (standalone) │
-│    flake.nix                                            │
-│    home.nix               ← home.packages (CLI ツール群)│
-│    overlays/              ← git-wt, roots (k1LoW)       │
-│    ↑ このリポジトリで管理 (dot_config/home-manager/)    │
-├─────────────────────────────────────────────────────────┤
-│  ~/.local/share/chezmoi/  ← dotfiles                    │
-│    dot_zshrc, dot_tmux.conf                             │
-│    dot_config/{nvim,alacritty,ghostty,                  │
-│                aerospace,sketchybar,...}                │
-│    dot_agents/.skill-lock.json  ← skill lock のみ管理  │
-│    run_onchange_install-skills.sh.tmpl ← 自動復元       │
-└─────────────────────────────────────────────────────────┘
-```
-
-## 役割分担
-
-| 層 | 担当 |
-|---|---|
-| **nix-darwin** | GUI アプリ (`homebrew.casks`)、フォント (`nerd-fonts.hack`, `plemoljp*`, `noto-fonts-cjk-serif`)、GPG 系 (`openssl_3`, `gnupg`, `pinentry_mac`)、system 設定 |
-| **home-manager** | ユーザー CLI ツール群 (`home.packages` のみ)。`programs.*` モジュールは使わず、dotfiles には触らない |
-| **chezmoi** | 全 dotfiles + `~/.config/home-manager/` の設定ファイル自体 (`dot_config/home-manager/`) |
-
-ホスト依存値 (`home.username`, `home.homeDirectory`, `homeConfigurations.*` の key) は chezmoi のテンプレ機能 (`{{ .chezmoi.username }}`, `{{ .chezmoi.homeDir }}`) で実機から動的取得する。
-
 ## セットアップ手順（新しい Mac で再現）
 
 ### 1. Nix インストール
