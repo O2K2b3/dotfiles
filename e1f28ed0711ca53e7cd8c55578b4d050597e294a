@@ -1,0 +1,2 @@
+{"id":"8319a2ca-60c4-48cb-933e-7d3a63fb9f88","fileUri":"file:///home/nixos/.local/share/chezmoi/dot_config/home-manager/home.nix.tmpl","repoName":"O2K2b3/dotfiles","branchName":"main","toolName":"apply_diff","startLine":81,"endLine":83,"taskId":null,"createdAt":1782956191021}
+{"id":"e6047144-e781-443d-9d6e-3e3a07dd1142","fileUri":"file:///home/nixos/.local/share/chezmoi/dot_config/home-manager/flake.nix.tmpl","repoName":"O2K2b3/dotfiles","branchName":"main","toolName":"apply_diff","startLine":18,"endLine":21,"taskId":null,"createdAt":1782955962687}
