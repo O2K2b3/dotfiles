@@ -10,27 +10,20 @@
     nix-claude-code.url = "github:ryoppippi/nix-claude-code";
     llm-agents.url = "github:numtide/llm-agents.nix";
     takt.url = "github:nrslib/takt";
-    mise-flake = {
-      url = "github:jdx/mise";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
-  outputs = inputs@{ self, nixpkgs, home-manager, nix-claude-code, llm-agents, mise-flake, takt, ... }:
+  outputs = inputs@{ self, nixpkgs, home-manager, nix-claude-code, llm-agents, takt, nixvim, ... }:
     let
       system = "{{ if eq .chezmoi.arch "arm64" }}aarch64{{ else if eq .chezmoi.arch "amd64" }}x86_64{{ end }}-{{ .chezmoi.os }}";
-      pkgs = import nixpkgs {
-        inherit system;
-        overlays = [ 
-          (import ./overlays)
-          nix-claude-code.overlays.default
-        ];
-      };
+      pkgs = nixpkgs.legacyPackages.${system}.appendOverlays [
+#        (import ./overlays)
+        nix-claude-code.overlays.default
+      ];
     in {
       homeConfigurations.{{ .chezmoi.username }} = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
         extraSpecialArgs = { inherit inputs; };
-        modules = [ ./home.nix ];
+        modules = [ ./home.nix nixvim.homeModules.nixvim ];
       };
     };
 }

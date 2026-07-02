@@ -78,9 +78,9 @@
     zsh
 
     # llm-agents
-    inputs.llm-agents.packages.${pkgs.system}.opencode
-    inputs.llm-agents.packages.${pkgs.system}.herdr
-    inputs.takt.packages.${pkgs.system}.default
+    inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.opencode
+    inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.herdr
+    inputs.takt.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 
   home.sessionVariables = {
@@ -169,9 +169,7 @@
       nix-direnv.enable = true;
     };
 
-  # Neovim is installed via packages/nvim.nix; its config is managed by
-  # chezmoi under ~/.config/nvim (LazyVim). We intentionally do NOT use
-  # programs.neovim here to avoid home-manager generating its own init.lua.
+  programs.nixvim.enable = true;
 
   programs.claude-code = {
     enable = true;
