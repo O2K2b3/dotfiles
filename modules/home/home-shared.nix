@@ -3,21 +3,14 @@
   imports = [
     ./op.nix
     ./packages/nvim.nix
-];
-
-
-  nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg)[
-    "claude"
-    "1password-cli"
+    ./programs/nvim
+    inputs.nixvim.homeModules.nixvim
+    inputs.skills.homeManagerModules.default
   ];
 
-  home.username = "{{ .chezmoi.username }}";
-  home.homeDirectory = "{{ .chezmoi.homeDir }}";
-  home.stateVersion = "24.11";
-
   home.packages = with pkgs; [
-    # 1Password CLI
-    _1password-cli
+    # claude-code (overlay applied at nixpkgs level in each host configuration)
+    claude-code
 
     # custom packages
     (callPackage ./packages/gwq.nix { })
@@ -73,7 +66,7 @@
 
     # terminal multiplexer
     tmux
-    
+
     # shell
     zsh
 
@@ -84,11 +77,12 @@
   ];
 
   home.sessionVariables = {
-      PNPM_HOME = "${config.home.homeDirectory}/.local/share/pnpm";
-      EDITOR = "nvim";
+    PNPM_HOME = "${config.home.homeDirectory}/.local/share/pnpm";
+    EDITOR = "nvim";
   };
 
   home.sessionPath = [
+    "${config.home.homeDirectory}/.local/bin"
     "${config.home.homeDirectory}/.local/share/pnpm/bin"
   ];
 
@@ -96,9 +90,9 @@
     enable = true;
     enableCompletion = true;
     shellAliases = {
-      ls="eza -l --icons";
-      la="eza -la";
-      lsl="eza --icons -a -RT --level 2";
+      ls = "eza -l --icons";
+      la = "eza -la";
+      lsl = "eza --icons -a -RT --level 2";
       v = "nvim";
       vi = "nvim";
       vim = "nvim";
@@ -135,7 +129,6 @@
       }
       zle -N ghq-fzf
       bindkey "^]" ghq-fzf
-
     '';
 
     syntaxHighlighting.enable = true;
@@ -144,37 +137,43 @@
   programs.starship = {
     enable = true;
     settings = {
-    # Inserts a blank line between shell prompts
-    add_newline = true;
-
-    # Wait 100 milliseconds for starship to check files under the current directory.
-    scan_timeout = 1000;
-
-    # Replace the '❯' symbol in the prompt with '➜'
-    # changed >>
-    character = { 
-    success_symbol = "[>>](bold green)"; # The 'success_symbol' segment is being set to '>>' with the color 'bold green'
-    error_symbol = "[>>](bold red)";     # The 'error_symbol' segment is being set to '>>' with the color 'bold red'
-    };
-    # Disable the package module, hiding it from the prompt completely
-    package.disabled = true;
+      add_newline = true;
+      scan_timeout = 1000;
+      character = {
+        success_symbol = "[>>](bold green)";
+        error_symbol = "[>>](bold red)";
+      };
+      package.disabled = true;
     };
   };
 
   programs.fzf.enable = true;
 
   programs.direnv = {
-      enable = true;
-      enableZshIntegration = true;
-      nix-direnv.enable = true;
-    };
-
-  programs.nixvim.enable = true;
-
-  programs.claude-code = {
     enable = true;
-    package = pkgs.claude-code;
+    enableZshIntegration = true;
+    nix-direnv.enable = true;
   };
 
-  programs.home-manager.enable = true;
+  # only available on linux
+  services.ssh-agent.enable = pkgs.stdenv.isLinux;
+
+  home.file = {
+    ".config/alacritty/alacritty.toml".source = ../../config/alacritty/alacritty.toml;
+    ".config/alacritty/themes".source = ../../config/alacritty/themes;
+    ".config/ghostty/config".source = ../../config/ghostty/config;
+    ".config/gwq/config.toml".source = ../../config/gwq/config.toml;
+  };
+
+  home.activation.claudeSettings = lib.hm.dag.entryAfter [ "writeBoundary" ] (
+    lib.optionalString pkgs.stdenv.isLinux ''
+      ANTHROPIC_AUTH_TOKEN=$("$HOME/.local/bin/op" read "op://Employee/ICA_API/credential" 2>/dev/null || echo "")
+      mkdir -p "$HOME/.claude"
+      ${pkgs.jq}/bin/jq --arg token "$ANTHROPIC_AUTH_TOKEN" \
+        '.env.ANTHROPIC_AUTH_TOKEN = $token' \
+        ${../../config/claude/settings.json} > "$HOME/.claude/settings.json"
+    ''
+  );
+
+  home.stateVersion = "24.11";
 }
