@@ -14,6 +14,7 @@
 
     # custom packages
     (callPackage ./packages/gwq.nix { })
+    (callPackage ./packages/givy.nix { })
     # navigation / search
     ghq
     fzf
@@ -104,6 +105,14 @@
       # lang settings for hyper
       export LANG=en_US.UTF-8
       export LC_ALL=C.UTF-8
+
+      # givy web UI を ghq のホスト単位で起動。
+      # givy は <owner>/<repo> 固定2階層・シンボリックリンク非追従・1プロセス1 root のため、
+      # ホスト (github.com / localhost 等) ごとに root を切り替える。
+      #   gy            -> ~/ghq/github.com を serve
+      #   gy localhost  -> ~/ghq/localhost を serve
+      #   gy github.com --port 6300  -> 追加フラグはそのまま givy へ渡す
+      gy() { givy serve "$HOME/ghq/''${1:-github.com}" "''${@:2}"; }
 
       # 履歴
       # メモリに保存される履歴の件数
