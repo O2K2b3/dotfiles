@@ -49,6 +49,7 @@
       "react-best-practices"
       # mattpocock/skills
       "grill-me"
+      "grilling"
       # forrestchang/andrej-karpathy-skills
       "karpathy-guidelines"
     ];
