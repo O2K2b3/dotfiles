@@ -6,6 +6,7 @@
   find-skills,
   mattpocock,
   karpathy,
+  mermaid-architect,
   ...
 }:
 {
@@ -39,6 +40,10 @@
         path = karpathy;
         subdir = "skills";
       };
+      mermaid-architect = {
+        path = mermaid-architect;
+	# subdir = "skills";
+      };
     };
     skills.enable = [
       # vercel-labs/skills
@@ -52,6 +57,7 @@
       "grilling"
       # forrestchang/andrej-karpathy-skills
       "karpathy-guidelines"
+      "mermaid-architect"
     ];
     targets = {
       claude = {

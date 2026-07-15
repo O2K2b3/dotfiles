@@ -27,6 +27,10 @@
       url = "github:forrestchang/andrej-karpathy-skills";
       flake = false;
     };
+    mermaid-architect = {
+      url = "github:SpillwaveSolutions/design-doc-mermaid";
+      flake = false;
+    };
   };
 
   outputs =
@@ -38,6 +42,7 @@
       find-skills,
       mattpocock,
       karpathy,
+      mermaid-architect,
       ...
     }:
     {
@@ -53,6 +58,7 @@
               vercel
               mattpocock
               karpathy
+	      mermaid-architect
               ;
           }
         );
