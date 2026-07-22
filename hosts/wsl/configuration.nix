@@ -25,6 +25,7 @@ in
   nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
     "claude-code"
     "1password-cli"
+    "terraform"
   ];
 
   home-manager = {

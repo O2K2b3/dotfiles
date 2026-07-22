@@ -34,6 +34,7 @@
     # CI / automation
     act
     wrkflw
+    terraform
 
     # network tools
     arp-scan

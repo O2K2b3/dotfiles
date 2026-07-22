@@ -11,6 +11,7 @@
   nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
     "claude-code"
     "1password-cli"
+    "terraform"
   ];
 
   users.users.tsubasa.home = /Users/tsubasa;
