@@ -101,6 +101,7 @@
       lg = "lazygit";
       gg = "keifu";
       claude-personal = "CLAUDE_CONFIG_DIR=~/.claude-personal claude";
+      claude-work = "CLAUDE_CONFIG_DIR=~/.claude-work claude";
     };
     initContent = ''
       # lang settings for hyper
@@ -139,6 +140,7 @@
       }
       zle -N ghq-fzf
       bindkey "^]" ghq-fzf
+      eval "$(devbox global shellenv)"
     '';
 
     syntaxHighlighting.enable = true;

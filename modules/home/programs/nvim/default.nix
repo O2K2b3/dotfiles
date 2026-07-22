@@ -7,6 +7,7 @@
     ./plugins/which-key.nix
     ./plugins/web-devicons.nix
     ./plugins/no-neck-pain.nix
+    ./plugins/flash.nix
   ];
 
   programs.nixvim = {
