@@ -6,6 +6,7 @@
     ./plugins/oil.nix
     ./plugins/which-key.nix
     ./plugins/web-devicons.nix
+    ./plugins/no-neck-pain.nix
   ];
 
   programs.nixvim = {
