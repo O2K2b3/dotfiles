@@ -19,7 +19,8 @@
     ghq
     fzf
     zoxide
-    peco
+    # peco
+    tree
 
     # dev environments / build
     devenv
@@ -34,7 +35,6 @@
     # CI / automation
     act
     wrkflw
-    terraform
 
     # network tools
     arp-scan
@@ -59,7 +59,7 @@
     git-lfs
     gh
     lazygit
-    (callPackage ./packages/keifu.nix { })
+    # (callPackage ./packages/keifu.nix { })
 
     # shell / prompt
     sheldon
@@ -76,10 +76,13 @@
     # llm-agents
     inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.opencode
     inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.herdr
-    inputs.takt.packages.${pkgs.stdenv.hostPlatform.system}.default
+    # inputs.takt.packages.${pkgs.stdenv.hostPlatform.system}.default
 
     # diagram
     d2
+
+    #temp
+    python312
   ];
 
   home.sessionVariables = {
@@ -96,9 +99,9 @@
     enable = true;
     enableCompletion = true;
     shellAliases = {
-      ls = "eza -l --icons";
+      ls = "eza -l --icons always";
       la = "eza -la";
-      lsl = "eza --icons -a -RT --level 2";
+      lsl = "eza --icons always -a -RT --level 2";
       v = "nvim";
       vi = "nvim";
       vim = "nvim";
@@ -187,6 +190,13 @@
     ".config/ghostty/config".source = ../../config/ghostty/config;
     ".config/gwq/config.toml".source = ../../config/gwq/config.toml;
   };
+
+  home.activation.devboxGlobal = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    DEVBOX_GLOBAL_DIR="$HOME/.local/share/devbox/global/default"
+    mkdir -p "$DEVBOX_GLOBAL_DIR"
+    cp ${../../config/devbox/global/devbox.json} "$DEVBOX_GLOBAL_DIR/devbox.json"
+    chmod 644 "$DEVBOX_GLOBAL_DIR/devbox.json"
+  '';
 
   home.activation.claudeSettings = lib.hm.dag.entryAfter [ "writeBoundary" ] (
     lib.optionalString pkgs.stdenv.hostPlatform.isLinux ''
