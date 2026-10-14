@@ -7,6 +7,7 @@
   mattpocock,
   karpathy,
   mermaid-architect,
+  file-search-skill,
   ...
 }:
 {
@@ -48,10 +49,14 @@
         path = mermaid-architect;
 	# subdir = "skills";
       };
+      file-search-skill = {
+        path = file-search-skill;
+        subdir = "skills";
+      };
     };
     skills.enable = [
       # vercel-labs/skills
-      "find-skills"
+      # "find-skills"
       # vercel-labs/agent-skills
       "web-design-guidelines"
       "react-view-transitions"
@@ -73,6 +78,7 @@
       "to-spec"
       "to-tickets"
       "implement"
+      "implement-spec"
       "wayfinder"
       "prototype"
       "diagnosing-bugs"
@@ -81,11 +87,14 @@
       "domain-modeling"
       "codebase-design"
       "code-review"
-      "resolving-merge-conflicts"
+      "pr"
+      "retro"
       "wizard"
       # forrestchang/andrej-karpathy-skills
       "karpathy-guidelines"
       "mermaid-architect"
+      # file-search-skill
+      "file-search"
     ];
     targets = {
       claude = {
