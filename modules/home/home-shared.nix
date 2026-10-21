@@ -83,6 +83,7 @@
 
     #temp
     python312
+    awscli2
   ];
 
   home.sessionVariables = {
@@ -99,9 +100,6 @@
     enable = true;
     enableCompletion = true;
     shellAliases = {
-      ls = "eza -l --icons always";
-      la = "eza -la";
-      lsl = "eza --icons always -a -RT --level 2";
       v = "nvim";
       vi = "nvim";
       vim = "nvim";
@@ -111,6 +109,14 @@
       claude-work = "CLAUDE_CONFIG_DIR=~/.claude-work claude";
     };
     initContent = ''
+      # eza の別名は Claude Code の外だけ。Claude Code の Bash ツールもこの設定を読むので、
+      # $(ls ...) がファイル名ではなく eza の長い表示を返してしまう
+      if [[ -z $CLAUDECODE ]]; then
+        alias ls='eza -l --icons always'
+        alias la='eza -la'
+        alias lsl='eza --icons always -a -RT --level 2'
+      fi
+
       # lang settings for hyper
       export LANG=en_US.UTF-8
       export LC_ALL=C.UTF-8
