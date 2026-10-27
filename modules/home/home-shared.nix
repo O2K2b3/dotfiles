@@ -96,9 +96,9 @@
     enable = true;
     enableCompletion = true;
     shellAliases = {
-      ls = "eza -l --icons";
+      ls = "eza -l --icons auto";
       la = "eza -la";
-      lsl = "eza --icons -a -RT --level 2";
+      lsl = "eza --icons auto -a -RT --level 2";
       v = "nvim";
       vi = "nvim";
       vim = "nvim";
