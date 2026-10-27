@@ -31,6 +31,10 @@
       url = "github:SpillwaveSolutions/design-doc-mermaid";
       flake = false;
     };
+    file-search-skill = {
+      url = "github:netresearch/file-search-skill";
+      flake = false;
+    };
   };
 
   outputs =
@@ -43,6 +47,7 @@
       mattpocock,
       karpathy,
       mermaid-architect,
+      file-search-skill,
       ...
     }:
     {
@@ -59,6 +64,7 @@
               mattpocock
               karpathy
 	      mermaid-architect
+	      file-search-skill
               ;
           }
         );

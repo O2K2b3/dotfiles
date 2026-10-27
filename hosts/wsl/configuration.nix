@@ -65,6 +65,8 @@ in
   environment.systemPackages = with pkgs; [
     git
     vim
+    ffmpeg
+    yt-dlp
   ];
 
   programs.nix-ld.enable = true;
@@ -82,4 +84,5 @@ in
   ];
   
   nix.settings.fallback = true;
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 }
